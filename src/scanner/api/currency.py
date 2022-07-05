@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from scanner.services.responce_currency import get_currency
+from src.scanner.services.responce_currency import get_currency
 
 router = APIRouter(
     prefix="/currency"
