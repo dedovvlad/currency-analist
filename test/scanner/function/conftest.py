@@ -1,7 +1,7 @@
 import pytest
 from fastapi.testclient import TestClient
 
-from src.scanner.app import app
+from app import app
 
 
 @pytest.fixture(scope="session")

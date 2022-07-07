@@ -5,10 +5,10 @@ from pydantic import BaseModel
 
 
 class CurrencyCode(str, Enum):
-    USD: Optional = "USD"
-    EUR: Optional = "EUR"
+    USD = "USD"
+    EUR = "EUR"
 
 
 class Currency(BaseModel):
-    USD: float
-    EUR: float
+    USD: Optional[float]
+    EUR: Optional[float]
