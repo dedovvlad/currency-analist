@@ -3,7 +3,7 @@ from pydantic import BaseSettings
 
 class SettingsUvicorn(BaseSettings):
     server_host: str = "127.0.0.1"
-    server_port: int = 4000
+    server_port: int = 8889
 
 
 class URLBankiRu(BaseSettings):

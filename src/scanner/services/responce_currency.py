@@ -27,6 +27,8 @@ def get_currency(currency_name: str = None) -> dict:
         for key, value in CURRENCY.items():
             course = __calculate_currency(__get_actual_course(CURRENCY.get(key)))
             currency_dict.update({key: course})
+
+    logger.info(currency_dict)
     return currency_dict
 
 
