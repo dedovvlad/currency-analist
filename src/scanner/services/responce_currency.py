@@ -41,10 +41,6 @@ def __calculate_currency(dict_asis: dict) -> float:
     try:
         calculate_currency = float("{:.3f}".format(dict_asis.get("value") / dict_asis.get("ratio")))
 
-    # except BaseException as ex:
-    #     raise logging(CurrencyCalculateError(
-    #         error_msg=f"Передан тип данных отличный от dict - '{type(dict_asis)}, {dict_asis}'"
-    #     ))
     except Exception as ex:
         logger.error("Переданы некорректные данные")
         raise CurrencyCalculateError(error_msg=f"{ex}")
