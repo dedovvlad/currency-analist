@@ -1,18 +1,10 @@
-from pydantic import BaseSettings
+import os
 
+env = os.environ.get
 
-class SettingsUvicorn(BaseSettings):
-    server_host: str = "127.0.0.1"
-    server_port: int = 5000
+# UVICORN
+SERVER_HOST = env("SERVER_HOST", "0.0.0.0")
+SERVER_PORT = env("SERVER_PORT", 8000)
 
-
-class URLBankiRu(BaseSettings):
-    url: str = "https://www.banki.ru/products/currency/ajax/quotations/value/cbr/"
-
-
-settings = SettingsUvicorn(
-    _env_file=".env",
-    _env_file_encoding="utf-8",
-)
-
-url_banki_ru = URLBankiRu()
+# BANKI.RU
+URL_BANKI_RU = "https://www.banki.ru/products/currency/ajax/quotations/value/cbr/"
