@@ -3,7 +3,7 @@ from datetime import datetime
 import requests
 from loguru import logger
 
-from src.scanner.settings import url_banki_ru
+from src.scanner import settings
 
 from .exceptions import CurrencyCalculateError
 
@@ -56,7 +56,7 @@ def __get_actual_course(id_currency: int) -> dict:
     :return: отдается JSON как есть из api
     """
     actual_course = requests.post(
-        url=url_banki_ru.url,
+        url=settings.URL_BANKI_RU,
         headers={"X-Requested-With": "XMLHttpRequest"},
         json={"currency_id": id_currency, "date": datetime.timestamp(datetime.now())},
     )
