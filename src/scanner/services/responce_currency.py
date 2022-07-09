@@ -1,3 +1,4 @@
+import json
 from datetime import datetime
 
 import requests
@@ -6,6 +7,7 @@ from loguru import logger
 from src.scanner import settings
 
 from .exceptions import CurrencyCalculateError
+from .redis_db import get_item_from_redis, setex_item_to_redis
 
 CURRENCY = {
     "EUR": 978,
@@ -19,17 +21,32 @@ def get_currency(currency_name: str = None) -> dict:
     :param currency_name: буквенный код валюты
     :return: JSON с с буквенным кодом и стоимостью валюты
     """
-    currency_dict = dict()
-    if currency_name:
-        course = __calculate_currency(__get_actual_course(CURRENCY.get(currency_name)))
-        currency_dict.update({currency_name: course})
-    else:
-        for key, value in CURRENCY.items():
-            course = __calculate_currency(__get_actual_course(CURRENCY.get(key)))
-            currency_dict.update({key: course})
 
-    logger.info(currency_dict)
-    return currency_dict
+    # TODO: Убрать костыль с присвоением ключа в кеше
+    if currency_name:
+        key_redis = currency_name
+    else:
+        key_redis = "CURRENCY"
+
+    redis_db = get_item_from_redis(key_redis)
+    if not redis_db:
+        currency_dict = dict()
+
+        # TODO: Переделать условия и использовать не мок валюты, а эндпоинт
+        if currency_name:
+            course = __calculate_currency(__get_actual_course(CURRENCY.get(currency_name)))
+            currency_dict.update({currency_name: course})
+        else:
+            for key, value in CURRENCY.items():
+                course = __calculate_currency(__get_actual_course(CURRENCY.get(key)))
+                currency_dict.update({key: course})
+
+        logger.info(f"Request was from API, {currency_dict}")
+        setex_item_to_redis(key=key_redis, item=currency_dict)
+        return currency_dict
+    else:
+        logger.info(f"Request was from Cache, {json.loads(redis_db)}")
+        return json.loads(redis_db)
 
 
 def __calculate_currency(dict_asis: dict) -> float:
