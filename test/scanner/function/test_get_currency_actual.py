@@ -19,3 +19,6 @@ def test_get_currency_actual_one_item_positive(client, currency):
 def test_give_unexisting_currence(client):
     response = client.get(url="/currency/actual", params="currency_code=MAD")
     assert response.status_code == 422
+
+
+# TODO: Дописать названия тестов
