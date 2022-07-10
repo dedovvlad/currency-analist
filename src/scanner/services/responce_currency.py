@@ -4,7 +4,7 @@ from datetime import datetime
 import requests
 from loguru import logger
 
-from src.scanner import settings
+from src import settings
 
 from .exceptions import CurrencyCalculateError
 from .redis_db import get_item_from_redis, setex_item_to_redis
