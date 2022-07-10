@@ -72,3 +72,13 @@ services:
         - app
         - redis
         - celery-worker
+
+    postgres:
+      image: postgres
+      container_name: postgres_db
+      environment:
+        POSTGRES_DB: "postgres"
+        POSTGRES_USER: "postgres"
+        POSTGRES_PASSWORD: "postgres"
+      ports:
+        - "5432:5432"

@@ -1,0 +1,42 @@
+@startuml
+
+autonumber
+
+actor User as U
+participant "Telegram Bot" as bot
+participant App as back
+database Cache as redis
+participant Bank as bank
+participant Cron as beat
+participant Worker as celery
+
+back --> beat: запуск крон
+back --> celery: запуск таски
+
+loop Periodic task
+
+    celery --> back: Запрос курса валюты
+
+    alt Request
+
+        back --> bank: Запрос курса валюты
+        back <-- bank: Получение курса валюты
+        back --> redis: Запись валюты в кеш
+
+    end Request
+
+    redis --> celery: ответ с текущим курсом
+
+end Periodic task
+
+U <- U: Добавление бота в чат
+
+U -> bot: Отправка команды "start"
+note left: Еще не реализовано
+
+bot --> back: Регистрация чата
+
+celery --> bot: Выдача курса валюты
+bot -> U: Нотификация в чат
+
+@enduml
