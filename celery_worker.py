@@ -1,5 +1,6 @@
 from celery import Celery
-from src import settings
+
+import settings
 
 celery = Celery(__name__)
 
@@ -7,17 +8,14 @@ celery.conf.broker_url = settings.CELERY_BROKER_URL
 celery.conf.result_backend = settings.CELERY_RESULT_BACKEND
 
 
-@celery.task(name="check")
-def check():
-    print('I am checking your stuff')
+@celery.task(name="something_task")
+def something_task():
+    print('I am something task')
 
 
 celery.conf.beat_schedule = {
-    "run-me-every-ten-seconds": {
-    "task": "check",
-    "schedule": 10.0
+    "something-task-every-ten-seconds": {
+        "task": "something_task",
+        "schedule": settings.CELERY_TIME_SLEEP
     }
 }
-
-# celery -A celery_worker.celery beat --loglevel=info
-# celery -A celery_worker.celery worker --loglevel=info
