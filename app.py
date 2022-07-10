@@ -1,8 +1,8 @@
 import uvicorn
 from fastapi import FastAPI
 
+import settings
 from src.scanner.api import router
-from src.scanner import settings
 
 app = FastAPI()
 app.include_router(router)
