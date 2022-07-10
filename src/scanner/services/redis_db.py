@@ -3,7 +3,7 @@ from datetime import timedelta
 
 from redis import Redis
 
-from src.scanner import settings
+import settings
 
 client_redis = Redis(
     host=settings.REDIS_HOST,
