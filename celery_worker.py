@@ -23,10 +23,7 @@ celery.conf.beat_schedule = {
     "update_chat_id_table": {
         "task": "update_chat_id_table",
         "schedule": settings.CELERY_TIME_SLEEP
-    }
-}
-
-celery.conf.beat_schedule = {
+    },
     "send_to_telegram": {
         "task": "send_to_telegram",
         "schedule": settings.CELERY_TIME_SLEEP

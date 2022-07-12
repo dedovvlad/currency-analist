@@ -9,11 +9,6 @@ services:
         - SERVER_HOST=0.0.0.0
         - SERVER_PORT=3333
         - REDIS_HOST=redis_db
-        - POSTGRES_USER=postgres
-        - POSTGRES_PASSWORD=postgres
-        - POSTGRES_NAME=postgres
-        - POSTGRES_HOST=postgres
-        - POSTGRES_PORT=5432
       volumes:
         - .:/currency-analyst
       working_dir: /currency-analyst
@@ -26,6 +21,8 @@ services:
     redis:
       image: redis:latest
       container_name: redis_db
+      environment:
+        - POSTGRES_HOST=postgres
       ports:
         - "6379:6379"
       command: ["redis-server", "--appendonly", "yes"]
@@ -49,6 +46,8 @@ services:
       environment:
         - CELERY_BROKER_URL=redis://redis:6379/0
         - CELERY_RESULT_BACKEND=redis://redis:6379/0
+        - POSTGRES_HOST=postgres
+        - REDIS_HOST=redis_db
       depends_on:
         - app
         - redis
@@ -60,6 +59,7 @@ services:
       environment:
         - CELERY_BROKER_URL=redis://redis:6379/0
         - CELERY_RESULT_BACKEND=redis://redis:6379/0
+        - POSTGRES_HOST=postgres
       depends_on:
         - app
         - redis
@@ -83,7 +83,7 @@ services:
       image: postgres
       container_name: postgres_db
       environment:
-        POSTGRES_DB: "postgres"
+        POSTGRES_NAME: "postgres"
         POSTGRES_USER: "postgres"
         POSTGRES_PASSWORD: "postgres"
       ports:
