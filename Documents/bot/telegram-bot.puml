@@ -40,3 +40,5 @@ celery --> bot: Выдача курса валюты
 bot -> U: Нотификация в чат
 
 @enduml
+
+'https://plantuml.com/ru/sequence-diagram

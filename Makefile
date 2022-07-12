@@ -19,3 +19,9 @@ tasks:
 
 beat:
 	celery -A celery_worker.celery beat --loglevel=info
+
+make-migrations:
+	alembic revision --autogenerate
+
+migration:
+	alembic upgrade head

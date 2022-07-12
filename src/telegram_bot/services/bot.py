@@ -1,5 +1,5 @@
 import requests
-
+from src.telegram_bot.database.crud import add_data_new_group, get_data_groups
 from src.scanner.services.responce_currency import get_currency
 
 CHAT_ID = "-1001551599820"
@@ -8,25 +8,30 @@ URL_API_TELEGRAM_SEND_MESSAGE = "https://api.telegram.org/bot{}/sendMessage?chat
 URL_API_TELEGRAM_META_ABOUT_BOT = "https://api.telegram.org/bot{}/getUpdates"
 
 
-def get_chat_id():
+def update_list_chats():
     url = URL_API_TELEGRAM_META_ABOUT_BOT.format(BOT_API_KEY)
-    response = requests.get(url)
-    set_chat_id = set()
-    list_message = response.json()["result"]
-    for item in list_message:
-        if item.get("message"):
-            chat_meta = item.get("message")
-            if chat_meta.get("chat"):
-                set_chat_id.add(str(chat_meta.get("chat").get("id")))
+    bot_metadata = requests.get(url)
+    list_message: list = bot_metadata.json()["result"]
 
-    return set_chat_id
+    try:
+        list_message.__len__() != 0
+    except IndexError as ex:
+        pass
+    else:
+        for item in list_message:
+            if item["message"]["chat"]["id"]:
+                try:
+                    add_data_new_group(
+                        chat=item["message"]["chat"]["id"],
+                        update=item["message"]["chat"]["id"],
+                    )
+                except:
+                    continue
 
 
-def send_message_to_telegram_chat():
+def send_messadge_for_groups():
+    groups_list = get_data_groups()
     text = "<b>EXCHANGE RATE:</b>\n{}"
-    for id_chat in get_chat_id():
-        url = URL_API_TELEGRAM_SEND_MESSAGE.format(BOT_API_KEY, id_chat, text.format(get_currency()))
+    for item in groups_list:
+        url = URL_API_TELEGRAM_SEND_MESSAGE.format(BOT_API_KEY, item.chat_id, text.format(get_currency()))
         requests.get(url)
-
-
-send_message_to_telegram_chat()
