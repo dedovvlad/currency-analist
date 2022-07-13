@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 
-from src.telegram_bot.database import models
 from src.database import session
+from src.telegram_bot.database import models
 
 
 def add_data_new_group(chat, update, db: Session = session()):

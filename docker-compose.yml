@@ -9,10 +9,10 @@ services:
         - SERVER_HOST=0.0.0.0
         - SERVER_PORT=3333
         - REDIS_HOST=redis_db
+        - POSTGRES_HOST=postgres
       volumes:
         - .:/currency-analyst
       working_dir: /currency-analyst
-      command: ["alembic", "upgrade head"]
       ports:
         - "3333:3333"
       depends_on:
@@ -82,6 +82,7 @@ services:
     postgres:
       image: postgres
       container_name: postgres_db
+
       environment:
         POSTGRES_NAME: "postgres"
         POSTGRES_USER: "postgres"

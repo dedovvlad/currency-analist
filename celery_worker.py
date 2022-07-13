@@ -1,7 +1,7 @@
 from celery import Celery
 
 import settings
-from src.telegram_bot.services.bot import update_list_chats, send_messadge_for_groups
+from src.telegram_bot.services.bot import send_messadge_for_groups, update_list_chats
 
 celery = Celery(__name__)
 
@@ -22,10 +22,10 @@ def send_to_telegram():
 celery.conf.beat_schedule = {
     "update_chat_id_table": {
         "task": "update_chat_id_table",
-        "schedule": settings.CELERY_TIME_SLEEP
+        "schedule": settings.CELERY_TIME_SLEEP,
     },
     "send_to_telegram": {
         "task": "send_to_telegram",
         "schedule": settings.CELERY_TIME_SLEEP
-    }
+    },
 }
