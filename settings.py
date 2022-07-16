@@ -24,3 +24,18 @@ TIME_CACHE = env("TIME_CACHE", 60)
 CELERY_BROKER_URL = env("CELERY_BROKER_URL", "")
 CELERY_RESULT_BACKEND = env("CELERY_RESULT_BACKEND", "")
 CELERY_TIME_SLEEP = env("CELERY_TIME_SLEEP", 10)
+
+# POSTGRES
+POSTGRES_USER = env("POSTGRES_USER", "")
+POSTGRES_PASSWORD = env("POSTGRES_PASSWORD", "")
+POSTGRES_NAME = env("POSTGRES_NAME", "")
+POSTGRES_HOST = env("POSTGRES_HOST", "")
+POSTGRES_PORT = env("POSTGRES_PORT", "")
+
+# TELEGRAM
+BOT_API_KEY = env("BOT_API_KEY", "")
+URL_API_BOT_DATA = env("URL_API_BOT_DATA", "https://api.telegram.org/bot{}/getUpdates")
+URL_API_BOT_MESSAGE = env(
+    "URL_API_BOT_MESSAGE",
+    "https://api.telegram.org/bot{}/sendMessage?chat_id={}&parse_mode=html&text={}",
+)

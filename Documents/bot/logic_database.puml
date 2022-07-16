@@ -1,0 +1,26 @@
+@startuml
+'https://plantuml.com/ru/sequence-diagram
+autonumber
+
+actor User as U
+participant Cron
+participant "Task\n'Update Chat list'" as task1
+participant "Task\n'Send Message'" as task2
+database Postgres as pg
+participant "API TG" as tg
+
+alt Update Chat list
+    Cron --> task1: Запуск таски на обновление\nподключения новых групп к боту
+    task1 --> tg: Запрос метадаты бота
+    task1 <-- tg: Ответ API с данными
+    task1 --> pg: Запись данных по группам
+end
+
+alt Send Message
+Cron --> task2: Запуск таски на отправку сообщения в группы
+task2 --> pg: Запрос на список ID групп
+task2 <-- pg: Ответ со всеми объектами
+task2 --> tg: Отправка сообщения клиенту
+tg -> U: Доставка сообщения
+end
+@enduml

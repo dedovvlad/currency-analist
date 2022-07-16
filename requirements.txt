@@ -10,3 +10,7 @@ isort==5.10.1
 redis==4.3.4
 celery==5.2.7
 flower==1.1.0
+pyTelegramBotAPI==4.6.0
+alembic==1.8.0
+SQLAlchemy==1.4.39
+psycopg2-binary==2.9.3
