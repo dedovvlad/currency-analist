@@ -1,6 +1,5 @@
-from src.telegram_bot.services.chats import ChatsTelegram
 from settings import BOT_API_KEY, URL_API_BOT_DATA
-
+from src.telegram_bot.services.chats import ChatsTelegram
 
 chats_tg = ChatsTelegram(url=URL_API_BOT_DATA, api_key=BOT_API_KEY)
 

@@ -1,9 +1,8 @@
 import requests
 from loguru import logger
+
 from src.telegram_bot.database.crud import add_data_new_group
 from src.telegram_bot.services.exceptions import TelegramGroupError
-
-# CHAT_ID = "-1001551599820"
 
 
 class ChatsTelegram:
@@ -12,9 +11,7 @@ class ChatsTelegram:
         self.api_key = api_key
 
     def _get_group_id_from_bot(self) -> dict | int:
-        response = requests.get(
-            url=self.url.format(self.api_key)
-        )
+        response = requests.get(url=self.url.format(self.api_key))
 
         try:
             response.raise_for_status()
@@ -32,8 +29,10 @@ class ChatsTelegram:
 
         for result in body.get("result"):
             for kr in result.keys():
-                for k in result.get(kr).keys():
-                    chat_id_list.append(result.get(kr).get(k))
+                if isinstance(result.get(kr), dict):
+                    for k in result.get(kr).keys():
+                        if k in ("chat",):
+                            chat_id_list.append(result.get(kr).get(k))
 
         return chat_id_list
 
@@ -45,12 +44,15 @@ class ChatsTelegram:
 
             if chat_id_list:
                 for item in chat_id_list:
-                    add_data_new_group(
-                        id_chat=item.get("id"),
-                        title_chat=item.get("title"),
-                        type_chat=item.get("type"),
-                    )
-                    logger.info(f"Add '{item}' to database")
+                    try:
+                        add_data_new_group(
+                            id_chat=item.get("id"),
+                            title_chat=item.get("title"),
+                            type_chat=item.get("type"),
+                        )
+                        logger.info(f"Add '{item}' to database")
+                    except:
+                        logger.info(f"'{item}' Exist to database")
 
             else:
                 raise TelegramGroupError("Unsuccessful attempt to write to database")

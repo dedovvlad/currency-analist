@@ -1,6 +1,8 @@
-from src.telegram_bot.database.crud import get_data_groups
-from src.scanner.services.responce_currency import get_currency
 import requests
+from loguru import logger
+
+from src.scanner.services.responce_currency import get_currency
+from src.telegram_bot.database.crud import get_data_groups
 
 
 class MessageTelegram:
@@ -8,11 +10,24 @@ class MessageTelegram:
         self.url = url
         self.api_key = api_key
 
+    @staticmethod
+    def _create_message():
+        return "<b>EXCHANGE RATE:</b>\n{}"
+
     def send_messadge_for_groups(self):
+
         groups_list = get_data_groups()
-        text = "<b>EXCHANGE RATE:</b>\n{}"
+
         for item in groups_list:
+
             url = self.url.format(
-                self.api_key, item.chat_id, text.format(get_currency())
+                self.api_key, item.id_chat, self._create_message().format(get_currency())
             )
-            requests.get(url)
+
+            try:
+                response = requests.get(url)
+                response.raise_for_status()
+                logger.info(f"Send message for client {item.id_chat}")
+
+            except requests.exceptions.HTTPError as ex:
+                logger.error("Error")

@@ -33,6 +33,9 @@ POSTGRES_HOST = env("POSTGRES_HOST", "")
 POSTGRES_PORT = env("POSTGRES_PORT", "")
 
 # TELEGRAM
-BOT_API_KEY = env("BOT_API_KEY", "5381914553:AAH155sIqXy_FY_SoZCeH3zVaO-pUTzXpk4")
+BOT_API_KEY = env("BOT_API_KEY", "")
 URL_API_BOT_DATA = env("URL_API_BOT_DATA", "https://api.telegram.org/bot{}/getUpdates")
-URL_API_BOT_MESSAGE = env("URL_API_BOT_MESSAGE", "https://api.telegram.org/bot{}/sendMessage?chat_id={}&parse_mode=html&text={}")
+URL_API_BOT_MESSAGE = env(
+    "URL_API_BOT_MESSAGE",
+    "https://api.telegram.org/bot{}/sendMessage?chat_id={}&parse_mode=html&text={}",
+)
