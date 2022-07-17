@@ -7,12 +7,19 @@ from loguru import logger
 import settings
 
 from .exceptions import CurrencyCalculateError
-from .redis_db import get_item_from_redis, setex_item_to_redis
+
+from src.utils.redis_database import Redis
 
 CURRENCY = {
     "EUR": 978,
     "USD": 840,
 }
+
+redis_client = Redis(
+    redis_host=settings.REDIS_HOST,
+    redis_port=settings.REDIS_PORT,
+    brunch=("Currency", "EUR",),
+)
 
 
 def get_currency(currency_name: str = None) -> dict:
@@ -28,7 +35,8 @@ def get_currency(currency_name: str = None) -> dict:
     else:
         key_redis = "CURRENCY"
 
-    redis_db = get_item_from_redis(key_redis)
+    redis_db = redis_client.get_item(key_redis)
+    # redis_db = get_item_from_redis(key_redis)
     if not redis_db:
         currency_dict = dict()
 
@@ -42,7 +50,9 @@ def get_currency(currency_name: str = None) -> dict:
                 currency_dict.update({key: course})
 
         logger.info(f"Request was from API, {currency_dict}")
-        setex_item_to_redis(key=key_redis, item=currency_dict)
+
+        redis_client.setex_item(key=key_redis, item=currency_dict)
+        # setex_item_to_redis(key=key_redis, item=currency_dict)
         return currency_dict
     else:
         logger.info(f"Request was from Cache, {json.loads(redis_db)}")

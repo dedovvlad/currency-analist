@@ -4,10 +4,11 @@ import settings
 from src.telegram_bot.services.chats import ChatsTelegram
 from src.telegram_bot.services.message import MessageTelegram
 
-celery = Celery(__name__)
-
-celery.conf.broker_url = settings.CELERY_BROKER_URL
-celery.conf.result_backend = settings.CELERY_RESULT_BACKEND
+celery = Celery(
+    namespace="CELERY",
+    broker=settings.CELERY_BROKER_URL,
+    backend=settings.CELERY_RESULT_BACKEND,
+)
 
 
 @celery.task(name="update_chat_id_table")
@@ -33,5 +34,8 @@ celery.conf.beat_schedule = {
         "task": "update_chat_id_table",
         "schedule": settings.CELERY_TIME_SLEEP,
     },
-    "send_to_telegram": {"task": "send_to_telegram", "schedule": settings.CELERY_TIME_SLEEP},
+    "send_to_telegram": {
+        "task": "send_to_telegram",
+        "schedule": settings.CELERY_TIME_SLEEP,
+    },
 }

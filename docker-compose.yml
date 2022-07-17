@@ -42,7 +42,7 @@ services:
     celery-worker:
       container_name: worker
       build: .
-      command: celery -A celery_worker.celery worker --loglevel=info
+      command: celery -A src.background_tasks.celery_worker.celery worker --loglevel=info
       environment:
         - CELERY_BROKER_URL=redis://redis:6379/0
         - CELERY_RESULT_BACKEND=redis://redis:6379/0
@@ -55,7 +55,7 @@ services:
     celery-beat:
       container_name: cron
       build: .
-      command: celery -A celery_worker.celery beat --loglevel=info
+      command: celery -A src.background_tasks.celery_worker.celery beat --loglevel=info
       environment:
         - CELERY_BROKER_URL=redis://redis:6379/0
         - CELERY_RESULT_BACKEND=redis://redis:6379/0
@@ -68,7 +68,7 @@ services:
     flower:
       container_name: flower_ui
       build: .
-      command: celery -A celery_worker.celery flower --port=5555
+      command: celery -A src.background_tasks.celery_worker.celery flower --port=5555
       ports:
         - "5556:5555"
       environment:
