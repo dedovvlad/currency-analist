@@ -17,10 +17,10 @@ linters:
 
 
 tasks:
-	celery -A celery_worker.celery worker --loglevel=info
+	celery -A src.tasks.celery_worker.celery worker --loglevel=info
 
 beat:
-	celery -A celery_worker.celery beat --loglevel=info
+	celery -A src.tasks.celery_worker.celery beat --loglevel=info
 
 make-migrations:
 	alembic revision --autogenerate

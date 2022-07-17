@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 
-from src.database import session
+from src.utils.database import session
 from src.telegram_bot.database import models
 
 

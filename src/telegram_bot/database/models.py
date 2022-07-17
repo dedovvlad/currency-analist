@@ -1,9 +1,9 @@
 from uuid import uuid4
 
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, String
 from sqlalchemy.dialects.postgresql import UUID
 
-from src.database import Base
+from src.utils.database import Base
 
 
 class TelegramGroups(Base):
